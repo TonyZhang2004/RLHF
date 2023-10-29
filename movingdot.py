@@ -18,22 +18,22 @@ class MovingDotEnv(gym.Env):
         return self.state
 
     def step(self, action):
-        if action == 0 and self.state[1] < self.observation_space.high:
-            self.state[1] += 1
-        elif action == 1 and self.state[1] > self.observation_space.low:
-            self.state[1] -= 1
-        elif action == 2 and self.state[0] < self.observation_space.high:
-            self.state[0] -= 1
-        elif action == 3 and self.state[0] < self.observation_space.low:
-            self.state[0] += 1
+        if action == 0:  # Up
+            self.state[1] = min(self.state[1] + 1, 10)
+        elif action == 1:  # Down
+            self.state[1] = max(self.state[1] - 1, 0)
+        elif action == 2:  # Left
+            self.state[0] = max(self.state[0] - 1, 0)
+        elif action == 3:  # Right
+            self.state[0] = min(self.state[0] + 1, 10)
         else:
             raise Exception("Invalid Action")
-        
-        self.state = np.clip(self.state, 0, 10)
 
+        # Note: The reward is not used in this example
+        # Using Q-learning
         reward = -1
         done = False
-        
+    
         if np.array_equal(self.state, np.array([5.0, 5.0])):
             done = True
             reward = 10
@@ -45,20 +45,5 @@ class MovingDotEnv(gym.Env):
         ax.scatter(self.state[0], self.state[1], c='red')
         ax.set_xlim(0, 10)
         ax.set_ylim(0, 10)
-
-def get_user_action():
-    print("Select action: 0: Up, 1: Down, 2: Left, 3: Right")
-    action = int(input())
-    return action
-
-def get_user_reward():
-    print("Provide a reward signal (positive or negative number):")
-    reward = float(input())
-    return reward
-
-def get_user_done():
-    print("Is the episode done? (yes/no)")
-    done = input().strip().lower() == 'yes'
-    return done
 
 
