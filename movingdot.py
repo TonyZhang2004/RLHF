@@ -69,22 +69,23 @@ def play():
         ax.clear()
         print(f"Current state: {state}")
         
-        action = get_user_action()
-        state, _, _, _ = env.step(action)  # Update the global state variable
-        
-        reward = get_user_reward()
-        done = get_user_done()
-        
+        action = agent.select_action(state)
+        next_state, reward, done, _ = env.step(action)
+        agent.learn(state, action, reward, next_state, done)
+    
+        state = next_state if not done else env.reset()  # Update the global state variable
+    
         env.render(ax)
         plt.pause(0.1)  # Pause to allow the plot to be rendered
-        
+    
         if done:
             ani.event_source.stop()
             
     env = MovingDotEnv()
+    agent = QLearningAgent()
     state = env.reset()
     fig, ax = plt.subplots()
-    ani = FuncAnimation(fig, update, frames=100, repeat=False)
+    ani = FuncAnimation(fig, update(), frames=100, repeat=False)
     
     plt.show()  
 
