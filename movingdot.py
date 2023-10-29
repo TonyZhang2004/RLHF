@@ -31,8 +31,6 @@ class MovingDotEnv(gym.Env):
         
         self.state = np.clip(self.state, 0, 10)
 
-        # Note: The reward is not used in this example
-        # Using Q-learning
         reward = -1
         done = False
         
@@ -62,33 +60,5 @@ def get_user_done():
     print("Is the episode done? (yes/no)")
     done = input().strip().lower() == 'yes'
     return done
-
-def play():
-    def update(frame):
-        global state  # Declare state as a global variable
-        ax.clear()
-        print(f"Current state: {state}")
-        
-        action = agent.select_action(state)
-        next_state, reward, done, _ = env.step(action)
-        agent.learn(state, action, reward, next_state, done)
-    
-        state = next_state if not done else env.reset()  # Update the global state variable
-    
-        env.render(ax)
-        plt.pause(0.1)  # Pause to allow the plot to be rendered
-    
-        if done:
-            ani.event_source.stop()
-            
-    env = MovingDotEnv()
-    agent = QLearningAgent()
-    state = env.reset()
-    fig, ax = plt.subplots()
-    ani = FuncAnimation(fig, update(), frames=100, repeat=False)
-    
-    plt.show()  
-
-
 
 
