@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import ACAgent
 
+from reward import basic_reward
+
 class MovingDotEnv(gym.Env):
     def __init__(self):
         super(MovingDotEnv, self).__init__()
@@ -29,13 +31,11 @@ class MovingDotEnv(gym.Env):
         else:
             raise Exception("Invalid Action")
 
-        # Using Q-learning
-        reward = -1
+        reward = basic_reward(self.state)
         done = False
     
         if np.array_equal(self.state, np.array([5.0, 5.0])):
             done = True
-            reward = 10
 
         info = {}
         return self.state, reward, done, info
