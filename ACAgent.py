@@ -50,7 +50,7 @@ class ActorCriticAgent:
 
     def learn(self, state, action, reward, next_state, done):
         state = torch.tensor(state, dtype=torch.float32)
-        action = torch.tensor(action, dtype=torch.long)  # Convert action to a PyTorch tensor
+        action = torch.tensor(action, dtype=torch.long)  
         next_state = torch.tensor(next_state, dtype=torch.float32)
         reward = torch.tensor(reward, dtype=torch.float32)
         done = torch.tensor(done, dtype=torch.float32)
