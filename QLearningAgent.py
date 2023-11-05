@@ -8,7 +8,7 @@ class QLearningAgent:
         self.discount_factor = 0.99
         self.exploration_rate = 1.0
         self.exploration_decay = 0.995
-        self.min_exploration_rate = 0.01
+        self.min_exploration_rate = 0.2
 
     def select_action(self, state):
         if np.random.rand() < self.exploration_rate:

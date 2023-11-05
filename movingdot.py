@@ -14,7 +14,7 @@ class MovingDotEnv(gym.Env):
         self.reset()
 
     def reset(self):
-        self.state = np.array([5.0, 5.0])
+        self.state = np.array([0.0, 0.0])
         return self.state
 
     def step(self, action):
@@ -29,7 +29,6 @@ class MovingDotEnv(gym.Env):
         else:
             raise Exception("Invalid Action")
 
-        # Note: The reward is not used in this example
         # Using Q-learning
         reward = -1
         done = False
