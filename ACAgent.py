@@ -4,6 +4,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+actor_weights_path = "weights/actor_weights.h5"
+critic_weights_path = "weights/critic_weights.h5"
+
 class Actor(nn.Module):
     def __init__(self, state_size, action_size):
         super(Actor, self).__init__()
@@ -34,7 +37,7 @@ class Critic(nn.Module):
         return self.network(state)
 
 class ActorCriticAgent:
-    def __init__(self, state_size, action_size, learning_rate_actor=1e-3, learning_rate_critic=1e-2, gamma=0.90, beta=0.1):
+    def __init__(self, state_size, action_size, learning_rate_actor=1e-4, learning_rate_critic=1e-4, gamma=0.90, beta=0.1):
         self.actor = Actor(state_size, action_size)
         self.critic = Critic(state_size)
         self.optimizer_actor = optim.Adam(self.actor.parameters(), lr=learning_rate_actor)
@@ -49,6 +52,9 @@ class ActorCriticAgent:
         return action
 
     def learn(self, state, action, reward, next_state, done):
+        self.actor.train()
+        self.critic.train()
+
         state = torch.tensor(state, dtype=torch.float32)
         action = torch.tensor(action, dtype=torch.long)  
         next_state = torch.tensor(next_state, dtype=torch.float32)
@@ -73,6 +79,19 @@ class ActorCriticAgent:
         self.optimizer_actor.zero_grad()
         loss_actor.backward()
         self.optimizer_actor.step()
+
+        return loss_actor
+
+    def save(self):
+        torch.save(self.actor.state_dict(), actor_weights_path)
+        torch.save(self.critic.state_dict(), critic_weights_path)
+
+    def load(self):
+        self.actor.load_state_dict(torch.load(actor_weights_path))
+        self.critic.load_state_dict(torch.load(critic_weights_path))
+
+        self.actor.eval()
+        self.critic.eval()
 
 
 

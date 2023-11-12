@@ -3,7 +3,7 @@ from gym import spaces
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-import ACAgent
+import random
 
 from reward import basic_reward
 
@@ -16,7 +16,7 @@ class MovingDotEnv(gym.Env):
         self.reset()
 
     def reset(self):
-        self.state = np.array([0.0, 0.0])
+        self.state = np.array([0, 0])
         return self.state
 
     def step(self, action):
@@ -32,6 +32,7 @@ class MovingDotEnv(gym.Env):
             raise Exception("Invalid Action")
 
         reward = basic_reward(self.state)
+        # print(f"The reward is {reward}.")
         done = False
     
         if np.array_equal(self.state, np.array([5.0, 5.0])):
